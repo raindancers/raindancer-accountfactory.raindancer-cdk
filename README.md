@@ -1,4 +1,4 @@
-# Accoutn Factory Construct
+# Account Factory Construct
 
 This is a cdk application project to create AWS accounts using Accoutn Factorys Service Catalog
 
