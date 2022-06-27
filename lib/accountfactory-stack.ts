@@ -1,16 +1,19 @@
 import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { AccountFactoryAccount, INewAccountProps } from './constructs/awsaccount'
 
 export class AccountfactoryStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
-
-    // example resource
-    // const queue = new sqs.Queue(this, 'AccountfactoryQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    const AccountTahi = new AccountFactoryAccount(this, 'accountTahi', {
+      sSOUserEmail: 'tahi@test.com',
+      sSOUserFirstName: 'tahi',
+      sSOUserLastName: 'test',
+      managedOrganizationalUnit: 'ou-qme3-zmhb40gw', // accountfactorytest
+      accountName: 'tahi',
+      accountEmail: 'tahi@test.com'
+    });
   }
 }
+
