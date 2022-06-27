@@ -5,5 +5,5 @@ import { AccountfactoryStack } from '../lib/accountfactory-stack';
 
 const app = new cdk.App();
 new AccountfactoryStack(app, 'AccountfactoryStack', {
-  env: { account: '454817366727', region: 'ap-southeast-2' },
+  env: { account: '4xxxxxxxxx7', region: 'ap-southeast-2' },
 });
