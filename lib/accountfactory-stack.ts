@@ -7,12 +7,12 @@ export class AccountfactoryStack extends Stack {
     super(scope, id, props);
 
     const AccountTahi = new AccountFactoryAccount(this, 'accountTahi', {
-      sSOUserEmail: 'tahi@test.com',
+      sSOUserEmail: 'aws.tahitest@place.nz',
       sSOUserFirstName: 'tahi',
       sSOUserLastName: 'test',
       managedOrganizationalUnit: 'ou-qme3-zmhb40gw', // accountfactorytest
       accountName: 'tahi',
-      accountEmail: 'tahi@test.com'
+      accountEmail: 'aws.tahitest@tahi.thing.nz'
     });
   }
 }

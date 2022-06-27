@@ -25,11 +25,8 @@ export class AccountFactoryAccount extends constructs.Construct {
   constructor(scope: constructs.Construct, id: string, props: INewAccountProps) {
     super(scope, id);
 
-    
-
-    const callAccountFactory = new lambda.Function(this, 'CallAccountFactoryLambda', {
-      handler: 'oompaloompa.on_event',
-      //code: lambda.Code.fromAsset(path.join(__dirname, 'lambda/oompaloompa'),
+    const callAccountFactory = new lambda.SingletonFunction(this, 'CallAccountFactoryLambda', {
+      uuid: 'f7d4f730-4ee1-11e8-9c2d-fa7ae01bbebc',
       code: lambda.Code.fromAsset(path.join('lib/lambda/oompaloompa'),
           {
             bundling: { 
@@ -40,8 +37,9 @@ export class AccountFactoryAccount extends constructs.Construct {
               ],
             },
           }),
-      runtime: lambda.Runtime.PYTHON_3_9,
-      //environment: 
+      handler: 'oompaloompa.on_event',
+      timeout: cdk.Duration.seconds(300),
+      runtime: lambda.Runtime.PYTHON_3_9
     });
 
     callAccountFactory.addToRolePolicy(
@@ -57,7 +55,6 @@ export class AccountFactoryAccount extends constructs.Construct {
 
     const callAccountFactoryCRProvider = new cr.Provider(this, 'CallAccountFactoryCR', {
       onEventHandler: callAccountFactory,
-      //logRetention: logs.RetentionDays.ONE_YEAR,
     });
 
     const now = new Date();
@@ -77,17 +74,11 @@ export class AccountFactoryAccount extends constructs.Construct {
       newAccountParameters.push(provisioningParameterProperty);
     };
     
-    // this is where thigns break.. 
-
-    new cdk.CfnOutput(this,'productid', {value: serviceCatalogId.getAtt('ProductId').toString()});
-    new cdk.CfnOutput(this,'artifactid', {value: serviceCatalogId.getAtt('ArtifactId').toString()});
-    
-
-    // const newAccount = new sc.CfnCloudFormationProvisionedProduct(this, 'newaccount', {
-    //   productId: provisioningArtifactId.getAtt('ProductId').toString(),  // swap to productId
-    //   provisionedProductName: props.accountName,             
-    //   provisioningArtifactId: provisioningArtifactId.getAtt('ArtifactId').toString(),
-    //   provisioningParameters: newAccountParameters
-    //})   
+    const newAccount = new sc.CfnCloudFormationProvisionedProduct(this, 'newaccount', {
+      productId: serviceCatalogId.getAtt('ProductId').toString(),  // swap to productId
+      provisionedProductName: props.accountName,             
+      provisioningArtifactId: serviceCatalogId.getAtt('ArtifactId').toString(),
+      provisioningParameters: newAccountParameters
+    })   
   }
 }
