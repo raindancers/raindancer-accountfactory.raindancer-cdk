@@ -11,12 +11,12 @@ import {
 from 'aws-cdk-lib'
 
 export interface INewAccountProps {
-  sSOUserEmail: string;
-  sSOUserFirstName: string;
-  sSOUserLastName: string;
-  managedOrganizationalUnit: string;
-  accountName: string;
-  accountEmail: string;
+  SSOUserEmail: string;
+  SSOUserFirstName: string;
+  SSOUserLastName: string;
+  ManagedOrganizationalUnit: string;
+  AccountName: string;
+  AccountEmail: string;
 }
 
 export class AccountFactoryAccount extends constructs.Construct {
@@ -47,7 +47,8 @@ export class AccountFactoryAccount extends constructs.Construct {
         effect: iam.Effect.ALLOW,
         actions: [
           "servicecatalog:SearchProductsAsAdmin",
-          "servicecatalog:DescribeProductAsAdmin"
+          "servicecatalog:DescribeProductAsAdmin",
+          "servicecatalog:ListProvisioningArtifacts"
         ],
         resources: ['*']
       })
@@ -75,8 +76,9 @@ export class AccountFactoryAccount extends constructs.Construct {
     };
     
     const newAccount = new sc.CfnCloudFormationProvisionedProduct(this, 'newaccount', {
-      productId: serviceCatalogId.getAtt('ProductId').toString(),  // swap to productId
-      provisionedProductName: props.accountName,             
+      //productId: serviceCatalogId.getAtt('ProductId').toString(),  // swap to productId
+      productName: 'AWS Control Tower Account Factory',
+      provisionedProductName: props.AccountName,             
       provisioningArtifactId: serviceCatalogId.getAtt('ArtifactId').toString(),
       provisioningParameters: newAccountParameters
     })   
